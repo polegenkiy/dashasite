@@ -1,0 +1,87 @@
+/* ===== Кольори та шрифти — змінюйте тут (палітра поки що заглушка) ===== */
+:root {
+  --bg: #c88ecd;          /* фон сторінки */
+  --paper: #c763bf;       /* світлі поверхні: кнопки-варіанти, рамки фото */
+  --text: #24302a;
+  --accent: #762360;      /* головний акцент: кнопки, конверт */
+  --accent-dark: #5c2a4f; /* клапан конверта */
+  /* Системні шрифти — нічого не завантажується. Інший шрифт: підключіть у <head> і впишіть сюди. */
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-title: "Iowan Old Style", Palatino, Georgia, serif;
+}
+
+/* ===== Базове ===== */
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 1.05rem/1.5 var(--font-body); }
+h1, h2, p, figure { margin: 0; }
+h1, h2 { font-family: var(--font-title); line-height: 1.2; }
+h1 { font-size: clamp(2rem, 8vw, 3rem); }
+h2 { font-size: clamp(1.5rem, 6vw, 2rem); }
+
+/* ===== Екрани: показується лише той, що має клас is-active ===== */
+.app { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: 1.25rem; }
+.screen { display: none; width: min(100%, 34rem); flex-direction: column; align-items: center; gap: 1.25rem; text-align: center; }
+.screen.is-active { display: flex; animation: fade-in 0.5s ease backwards; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* ===== Кнопки ===== */
+.btn {
+  min-height: 48px; /* зручно натискати пальцем */
+  padding: 0.75rem 1.75rem;
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled { cursor: default; }
+.btn:focus-visible, .envelope:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
+@media (hover: hover) { .btn:not(:disabled):hover { box-shadow: 0 3px 10px rgba(36, 48, 42, 0.25); } }
+.btn-ghost { background: transparent; color: var(--accent); }
+.btn-option { background: var(--paper); color: var(--text); }
+.btn-option.is-chosen { background: var(--accent); color: #fff; }
+.btn-option:disabled:not(.is-chosen) { opacity: 0.5; }
+
+/* ===== Екран 2: запитання ===== */
+.progress, .hint { font-size: 0.9rem; opacity: 0.7; }
+.options { display: grid; gap: 0.75rem; width: 100%; }
+.reaction { min-height: 3em; font-style: italic; }
+
+/* ===== Екран 3: конверт ===== */
+.envelope {
+  position: relative;
+  width: min(70vw, 16rem);
+  aspect-ratio: 3 / 2;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  box-shadow: 0 6px 18px rgba(36, 48, 42, 0.3);
+  cursor: pointer;
+}
+.envelope-flap {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 60%;
+  background: var(--accent-dark);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top;
+  transition: transform 0.9s ease; /* тривалість має збігатися з ENVELOPE_OPEN_MS у script.js */
+}
+.envelope.is-open .envelope-flap { transform: scaleY(-1); }
+
+/* ===== Екран 4: фінал ===== */
+.message { white-space: pre-line; } /* зберігає переноси рядків із HTML */
+.gallery { display: grid; gap: 1rem; width: 100%; }
+.gallery img { display: block; width: 100%; height: auto; border: 0.5rem solid var(--paper); }
+.gallery figcaption { margin-top: 0.4rem; font-size: 0.9rem; opacity: 0.7; }
+@media (min-width: 600px) { .gallery { grid-template-columns: 1fr 1fr; } }
+
+/* Для тих, хто вимкнув анімації в системі */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
